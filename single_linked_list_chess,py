@@ -1,0 +1,73 @@
+class Pemain:
+    def __init__(self, name, ranking):
+        self.name = name
+        self.ranking = ranking
+        self.next = None
+
+
+class Turnamen:
+    def __init__(self):
+        self.head = None
+
+    def daftar_pemain(self, name, ranking):
+        new_player = Pemain(name, ranking)
+        if self.head is None:
+            self.head = new_player
+        else:
+            current = self.head
+            while current.next is not None:
+                current = current.next
+            current.next = new_player
+
+    def pemain_tereliminasi(self, name):
+        if self.head is None:
+            return
+
+        if self.head.name == name:
+            self.head = self.head.next
+            return
+
+        current = self.head
+        while current.next is not None:
+            if current.next.name == name:
+                current.next = current.next.next
+                return
+            current = current.next
+
+    def print_pemain_berdasarkan_rangking(self):
+        if self.head is None:
+            print("Belum ada peserta terdaftar.")
+            return
+
+        sorted_players = self._sort_players_by_ranking()
+        print("Daftar peserta turnamen berdasarkan peringkat:")
+        for player in sorted_players:
+            print("Nama:", player.name, "| Peringkat:", player.ranking)
+
+    def _sort_players_by_ranking(self):
+        players = []
+        current = self.head
+        while current is not None:
+            players.append(current)
+            current = current.next
+        players.sort(key=lambda x: x.ranking)
+        return players
+
+
+# Contoh penggunaan
+
+turnamen = Turnamen()
+
+# Mendaftarkan peserta turnamen
+turnamen.daftar_pemain("wawa", 1500)
+turnamen.daftar_pemain("ujang", 1700)
+turnamen.daftar_pemain("Mamat", 1000)
+
+# Mencetak daftar peserta turnamen
+turnamen.print_pemain_berdasarkan_rangking()
+
+# Mengeliminasi peserta yang kalah
+turnamen.pemain_tereliminasi("Mamat")
+
+# Mencetak daftar peserta setelah eliminasi
+turnamen.print_pemain_berdasarkan_rangking()
